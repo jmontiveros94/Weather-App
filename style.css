@@ -43,6 +43,10 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
     vertical-align: auto;
+    border-bottom-style: solid;
+    border-top-style:solid;
+    border-left-style:solid;
+    border-right-style:solid;
 }
 
 .forecast {

@@ -1,14 +1,23 @@
 // Define your API endpoint and API key
 const apiKey = '17ad41f53999999aeabff2f676cf09f8';
 const apiEndpoint = 'https://api.openweathermap.org/data/2.5/weather';
+const resultObj = {
+  title: 'Weather Report',
+  currentweather: {
+    temperature: 25, // Temperature in Celsius
+    humidity: 50,   // Humidity percentage
+    windSpeed: 10   // Wind speed in m/s
+  },
+  forecast: ['Sunny', 'Clear skies']
+};
 
 var weatherData = {}
 // Function to fetch weather data for a city
 async function fetchWeatherData(city) {
-  // Construct the API URL with the city name and API key
+  // API URL with the city name and API key
   const apiUrl = `${apiEndpoint}?q=${city}&appid=${apiKey}`;
 
-  // Make the API request using the fetch function
+  // Makes the API request using the fetch function
   weatherData = await fetch(apiUrl)
     .then((response) => {
       if (!response.ok) {
@@ -29,10 +38,23 @@ async function fetchWeatherData(city) {
     console.log(weatherData)
 }
 
+function updateUI(data) {
+  const cityElement = document.getElementById('city');
+  const temperatureElement = document.getElementById('temperature');
+  const windSpeedElement = document.getElementById('wind');
+  const humidityElement = document.getElementById('humidity');
+
+  // Update the elements with the weather data
+  cityElement.textContent = `City: ${data.name}`;
+  temperatureElement.textContent = `Temperature: ${data.main.temp}°F`;
+  windSpeedElement.textContent = `Wind: ${data.wind.speed} m/s`;
+  humidityElement.textContent = `Humidity: ${data.main.humidity}%`;
+}
+
+
 function printResults(resultObj) {
     console.log(resultObj);
     var resultCard = document.createElement('div');
-    resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
   
     var resultBody = document.createElement('div');
     resultBody.classList.add('card-body');
@@ -41,15 +63,15 @@ function printResults(resultObj) {
     var titleEl = document.createElement('h3');
     titleEl.textContent = resultObj.title;
   
-    var bodyContentEl = document.createElement('p');
-    bodyContentEl.innerHTML =
+    var bodyContentEl = document.createElement('div');
+    temperature.innerHTML =
       '<strong>Date:</strong> ' + resultObj.currentweather + '<br/>';
-      if (resultObj.currentweather) {
-        bodyContentEl.innerHTML +=
-          '<strong>Subjects:</strong> ' + resultObj.subject.join(', ') + '<br/>';
+      if (resultObj.temperature) {
+        temperature.innerHTML +=
+          '<strong>Subjects:</strong> ' + resultObj.temperature.join(', ') + '<br/>';
       } else {
         bodyContentEl.innerHTML +=
-          '<strong>Subjects:</strong> No subject for this entry.';
+          '<strong>Subjects:</strong> Try another city. ';
       }
     
       if (resultObj.forecast) {
@@ -64,6 +86,44 @@ function printResults(resultObj) {
     
       resultContentEl.append(resultCard);
     }
+
+    function searchApi(query, format) {
+      var locQueryUrl = 'https://www.openweathermap.org/search/?fo=json';
+    
+      if (format) {
+        locQueryUrl = 'https://www.openweathermap.org/search' + format + '/?fo=json';
+      }
+    
+      locQueryUrl = locQueryUrl + '&q=' + query;
+    
+      fetch(locQueryUrl)
+        .then(function (response) {
+          if (!response.ok) {
+            throw response.json();
+          }
+    
+          return response.json();
+        })
+        .then(function (locRes) {
+          // write query to page so user knows what they are viewing
+          resultTextEl.textContent = locRes.search.query;
+    
+          console.log(locRes);
+    
+          if (!locRes.results.length) {
+            console.log('No results found!');
+            resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
+          } else {
+            resultContentEl.textContent = '';
+            for (var i = 0; i < locRes.results.length; i++) {
+              printResults(locRes.results[i]);
+            }
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+      }
 // Function to update the search history
 function updateSearchHistory(city) {
     // Get the existing search history from local storage (if any)
@@ -80,7 +140,7 @@ function updateSearchHistory(city) {
     }
   
     // Limit the search history to a certain number of items (e.g., 5)
-    const maxHistoryItems = 5;
+    const maxHistoryItems = 8;
     searchHistory = searchHistory.slice(0, maxHistoryItems);
   
     // Save the updated search history back to local storage
@@ -103,7 +163,7 @@ function handleSearch() {
   const cityInput = document.getElementById('city-input');
   const cityName = cityInput.value;
   if (cityName.trim() !== '') {
-    // Update the search history and fetch weather data
+    // Updates the search history and fetches the weather data
     updateSearchHistory(cityName);
     fetchWeatherData(cityName);
     // Clear the input field
