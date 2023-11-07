@@ -5,7 +5,7 @@ A weather application with current and future weather forecasts
 The Weather App application will allow users to stay up to date on current and future weather conditions by searching a specific city. The user will be able to enter a city into the search field and see a current weather forecast that includes the temperature, wind speed, and humidity. Additionally, users will see a search history displaying the previous 8 searches in descending order from most recent to last.
 
 # Screenshot 
-
+<img width="1416" alt="Screenshot 2023-11-06 at 11 46 38 PM" src="https://github.com/jmontiveros94/Work-Day-Planner/assets/134089282/e77ff02d-0e52-477a-89f3-2aef2f5428c9">
 # License
 MIT License
 
