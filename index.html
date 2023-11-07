@@ -10,12 +10,8 @@
 
 <body>
     <div class="container">
-        <div class="header">
-            Weather Dashboard
-        </div>
-        <div class="search-history">
-            Search For a City:
-        </div>
+        <div class="header"> Weather Dashboard</div>
+        <div class="city-input"> Search For a City:</div>
         <div class="search-form">
             <input type="text" id="city-input" placeholder="Enter a city">
             <button id="search-button">Search</button>
@@ -26,14 +22,15 @@
                 <!-- Search history items will be added here dynamically -->
             </ul>
         </div>
-        <div class="current-weather">
-            Current Weather:
+        <div class="current-weather">Current Weather:
+            <ul id="temperature"></ul>
+            <ul id="wind"></ul>
+            <ul id="humidity"></ul>
         </div>
-        <div class="forecast">
-            5 Day Forecast:
-        </div>
+        <div class="forecast"> 5 Day Forecast:</div>
     </div>
+    
     <script src="./script.js"></script>
 </body>
 
-</html>
+</html>*/
